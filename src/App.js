@@ -38,6 +38,13 @@ const localData = {
   },
 };
 
+
+function writeHandler(nodeId) {
+  var nodeData = this.get(nodeId);
+  var employeeName = nodeData["name"];
+  window.open('https://webcall.me/' + employeeName, employeeName, 'width=340px, height=670px, top=50px, left=50px');
+}
+
 const data1 = {
   nodeBinding: {
     field_0: 'name',
