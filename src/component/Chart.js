@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef, useHistory } from 'react';
+import CustomeModal from "./CustomModal";
+import FormModal from "./FormModal";
 import { Modal, Button } from "react-bootstrap";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.css";
@@ -14,6 +16,7 @@ const headers = {
 }
 
 // GET:/todoにアクセスする関数
+// 全件取得する
 const getNodeList = async () => {
   try {
     const response = await fetch(`${server}/todo`)
@@ -26,6 +29,7 @@ const getNodeList = async () => {
 };
 
 // POST:/todoにアクセスする関数
+// 1件DBに書き込む
 const createNode = async ({ node }) => {
   try {
     await fetch(`${server}/todo`, {
@@ -41,8 +45,14 @@ const createNode = async ({ node }) => {
 
 // OrgChartコンポーネント
 function Chart({ data }) {
+  const ref = useRef(null);
+
   // モーダルが開いているか閉じているか
-  const [open, setOpen] = useState(false);
+  const [show, setShow] = useState(false);
+
+  // モーダルの開閉ハンドラー
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   // NodoListを入れておく変数と更新する関数
   const [nodeList, setNodeList] = useState([]);
@@ -51,7 +61,7 @@ function Chart({ data }) {
     // ここに編集時の処理を追加
     var handlerNode = this.get(nodeId);
 
-    setOpen(true);
+    handleShow();
 
     // 新しく追加するNode
     var newNode = {
@@ -61,18 +71,11 @@ function Chart({ data }) {
       text: handlerNode["text"],
       tags: ["subroot"]
     }
-    // DBにPOST処理
-    //postNode({ text: newNode });
+    //await createNode(newNode);
+    handleClose();
 
-    // axios.post(server, newNode, headers)
-    //     .then((response) => {
-    //       console.log(response);
-    //     })
-    //     .catch(console.error);
-    // console.log(newNode);
-    await createNode(newNode);
-    showChart();
     this.addNode(newNode);
+    // showChart();
   }
 
   const nodeData = {
@@ -82,14 +85,13 @@ function Chart({ data }) {
     nodeBinding: {
       field_0: "text",
       field_1: 'author',
-      field_2: "id",
     },
     tags: {
       "subroot": {
-          template: "polina"
+          //template: "polina"
       },
       "mainroot": {
-          template: "ana"
+          //template: "ana"
       }
     },
     nodes: [],
@@ -103,14 +105,14 @@ function Chart({ data }) {
     },
   };
 
-  const ref = useRef(null);
 
   const showChart = async () => {
     console.log(data);
     // console.log(nodeData);
 
     // nodeMenuにWriteを追加
-    data.nodeMenu.write = {
+    nodeData.nodeMenu.write = {
+    // data.nodeMenu.write = {
       text: "write",
       icon: writeLogo,
       onClick: writeHandler
@@ -119,7 +121,12 @@ function Chart({ data }) {
     // console.log(nodeData);
 
     // APIからノードの情報を取得
-    var getNodes = await getNodeList();
+    //var getNodes = await getNodeList();
+    var getNodes = [
+      { id: 1, pid: 0, author: 'Amber McKenzie', text: "あいうえお", tags: ["mainroot"]},
+      { id: 2, pid: 1, author: 'Ava Field', text: "かきくけこ", tags: ["mainroot"]},
+      { id: 3, pid: 1, author: 'Peter Stevens', text: "さしすせそ", tags: ["subroot"]},
+    ];
 
     getNodes.map(node => {
       if (nodeList.length <= node.id){
@@ -134,7 +141,6 @@ function Chart({ data }) {
     nodeData.nodes = nodeList;
     // new window.OrgChart(ref.current, data);
     console.log("nodeData : ", nodeData);
-    this.templates.luba.field_2 = '<Button variant="primary" onClick={() => setOpen(true)}>Write</Button>';
     new window.OrgChart(ref.current, nodeData);
   };
 
@@ -146,20 +152,8 @@ function Chart({ data }) {
     <div>
       <div ref={ref} />
       <div>
-        <Modal show={open} onHide={() => setOpen(false)}>
-          <Modal.Header closeButton>
-            <Modal.Title>Modal heading</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={() => setOpen(false)}>
-              Close
-            </Button>
-            <Button variant="primary" onClick={() => setOpen(false)}>
-              Save Changes
-            </Button>
-          </Modal.Footer>
-        </Modal>
+        <CustomeModal show={show} zIndex="9999"/>
+        {/* <FormModal></FormModal> */}
       </div>
     </div>
   );
