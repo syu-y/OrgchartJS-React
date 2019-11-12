@@ -1,5 +1,6 @@
 import React from 'react';
-import { Navbar, Nav } from 'react-bootstrap';
+import { Navbar, Nav, Button } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap'
 
 function TopMenu() {
   return (
@@ -8,8 +9,14 @@ function TopMenu() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="justify-content-center">
-            <Nav.Link href="/">Home</Nav.Link>
-            <Nav.Link href="/chart">Chart</Nav.Link>
+            <LinkContainer to="/">
+              <Button>Home</Button>
+            </LinkContainer>
+            <LinkContainer to="/chart">
+              <Button>Chart</Button>
+            </LinkContainer>
+            {/* <Nav.Link href="/">Home</Nav.Link> */}
+            {/* <Nav.Link href="#chart">Chart</Nav.Link> */}
           </Nav>
         </Navbar.Collapse>
       </Navbar>
