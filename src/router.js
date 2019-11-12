@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import Router from './router'
-
-// OrgChart.templates.ana.field_2 = '<text class="field_2"  style="font-size: 14px;" fill="#ffffff" x="125" y="70" text-anchor="middle">{val}</text>';
+import React, { useRef } from 'react';
+import { BrowserRouter, Route } from 'react-router-dom';
+import Header from './component/TopMenu';
+import Chart from './component/Chart';
+import Home from './component/Home';
 
 // OrgChartをローカルで試すためのデータ
 const localData = {
@@ -39,18 +40,18 @@ const localData = {
   },
 };
 
-function App() {
-  return <Router />;
-  // return (
-  //   <div>
-  //     <div>
-  //       <TopMenu />
-  //     </div>
-  //     <div style={{ height:'500px', width:'1200px', margin: '0 30px' }}>
-  //       <Chart data={localData} />
-  //     </div>
-  //   </div>
-  // );
+
+function Router() {
+  const ref = useRef(null);
+  return (
+    <BrowserRouter>
+      <div>
+        <Header/>
+        <Route path="/home" component={Home} exact/>
+        <Route path="/chart" component={Chart} exact/>
+      </div>
+    </BrowserRouter>
+  );
 }
 
-export default App;
+export default Router;

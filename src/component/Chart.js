@@ -44,8 +44,9 @@ const createNode = async ({ node }) => {
 
 
 // OrgChartコンポーネント
-function Chart({ data }) {
+function Chart({ data, routerRef }) {
   const ref = useRef(null);
+  // const ref = document.getElementById('root');
 
   // モーダルが開いているか閉じているか
   const [show, setShow] = useState(false);
@@ -150,6 +151,7 @@ function Chart({ data }) {
 
   return(
     <div>
+      <h1> タイトル　</h1>
       <div ref={ref} />
       <div>
         <CustomeModal show={show} zIndex="9999"/>
