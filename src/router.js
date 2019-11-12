@@ -47,7 +47,7 @@ function Router() {
     <BrowserRouter>
       <div>
         <Header/>
-        <Route path="/home" component={Home} exact/>
+        <Route path="/" component={Home} exact/>
         <Route path="/chart" component={Chart} exact/>
       </div>
     </BrowserRouter>
