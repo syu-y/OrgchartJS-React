@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useHistory } from 'react';
 import CustomeModal from "./CustomModal";
 import FormModal from "./FormModal";
-import { Modal, Button } from "react-bootstrap";
+import { Modal, Form, Button } from "react-bootstrap";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.css";
 
@@ -146,9 +146,9 @@ function Chart() {
     // APIからノードの情報を取得
     //var getNodes = await getNodeList();
     var getNodes = [
-      { id: 1, pid: 0, author: 'Amber McKenzie', text: "あいうえお", tags: ["mainroot"]},
-      { id: 2, pid: 1, author: 'Ava Field', text: "かきくけこ", tags: ["mainroot"]},
-      { id: 3, pid: 1, author: 'Peter Stevens', text: "さしすせそ", tags: ["subroot"]},
+      { id: 1, pid: 0, author: 'Amber McKenzie', text: "吾輩わがはいは猫である。名前はまだ無い。どこで生れたかとんと見当けんとうがつかぬ。何でも薄暗いじめじめした所でニャーニャー泣いていた事だけは記憶している。吾輩はここで始めて人間というものを見た。しかもあとで聞くとそれは書生という人間中で一番獰悪どうあくな種族であったそうだ。この書生というのは時々我々を捕つかまえて煮にて食うという話である。しかしその当時は何という考もなかったから別段恐しいとも思わなかった。ただ彼の掌てのひらに載せられてスーと持ち上げられた時何だかフワフワした感じがあったばかりである。", tags: ["mainroot"]},
+      { id: 2, pid: 1, author: 'Ava Field', text: "掌の上で少し落ちついて書生の顔を見たのがいわゆる人間というものの見始みはじめであろう。この時妙なものだと思った感じが今でも残っている。第一毛をもって装飾されべきはずの顔がつるつるしてまるで薬缶やかんだ。その後ご猫にもだいぶ逢あったがこんな片輪かたわには一度も出会でくわした事がない。のみならず顔の真中があまりに突起している。そうしてその穴の中から時々ぷうぷうと煙けむりを吹く。どうも咽むせぽくて実に弱った。これが人間の飲む煙草たばこというものである事はようやくこの頃知った。", tags: ["mainroot"]},
+      { id: 3, pid: 1, author: 'Peter Stevens', text: "まだ春は浅く、そしてその日は曇くもっていて、西空に密雲がたれこみ、日が早く暮れかけていた。青二は、すきな歌を、かたっぱしから口笛で吹いて、いい気持で歩いていった。そのとき、道ばたで、「にゃーお」と、猫のなき声がした。青二は猫が大好きだった。この間まで、青二の家にもミイという猫がいたが、それは近所の犬の群れにかこまれて、むざんにもかみ殺されてしまった。青二はそのとき、わあわあと泣いたものだ。ミイが殺されてから、青二の家には猫がいない。", tags: ["subroot"]},
     ];
 
     getNodes.map(node => {
@@ -202,6 +202,16 @@ function Chart() {
           </Modal.Header>
           <Modal.Body>
             <p>{showData}</p>
+            <div class="border-secondary border-top" style={{padding:'10px'}}></div>
+            <Form>
+              <Form.Group controlId="formBasicNumber">
+                <Form.Label>Tipping!</Form.Label>
+                <Form.Control type="number" placeholder="0" />
+              </Form.Group>
+              <Button variant="primary" type="submit">
+                Submit
+              </Button>
+            </Form>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleReadClose}>
