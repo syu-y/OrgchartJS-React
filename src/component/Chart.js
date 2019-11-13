@@ -44,16 +44,38 @@ const createNode = async ({ node }) => {
 
 
 // OrgChartコンポーネント
-function Chart({ data, routerRef }) {
+function Chart() {
   const ref = useRef(null);
-  // const ref = document.getElementById('root');
+
+  var sentence = "";
+
+  const [showData, setShowData] = useState("");
 
   // モーダルが開いているか閉じているか
-  const [show, setShow] = useState(false);
+  const [showReadModal, setShowReadModal] = useState(false);
+  const [showWriteModal, setShowWriteModal] = useState(false);
 
   // モーダルの開閉ハンドラー
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  function handleWriteShow(nodeId) {
+    var handleNode = this.get(nodeId);
+    sentence = handleNode['text'];
+    console.log(handleNode);
+    setShowWriteModal(true);
+  }
+  function handleWriteClose(){
+    setShowWriteModal(false);
+  }
+  function handleReadShow(nodeId) {
+    var handleNode = this.get(nodeId);
+    sentence = handleNode['text'];
+    setShowData(handleNode['text']);
+    console.log(sentence);
+    console.log(handleNode);
+    setShowReadModal(true);
+  }
+  function handleReadClose() {
+    setShowReadModal(false);
+  }
 
   // NodoListを入れておく変数と更新する関数
   const [nodeList, setNodeList] = useState([]);
@@ -62,18 +84,16 @@ function Chart({ data, routerRef }) {
     // ここに編集時の処理を追加
     var handlerNode = this.get(nodeId);
 
-    handleShow();
-
     // 新しく追加するNode
     var newNode = {
-      id: data.nodes.length + 1,
+      id: nodeData.nodes.length + 1,
       pid: handlerNode["id"],
       author: handlerNode["author"],
       text: handlerNode["text"],
       tags: ["subroot"]
     }
     //await createNode(newNode);
-    handleClose();
+    handleWriteClose();
 
     this.addNode(newNode);
     // showChart();
@@ -89,37 +109,39 @@ function Chart({ data, routerRef }) {
     },
     tags: {
       "subroot": {
-          //template: "polina"
+        //template: "polina"
       },
       "mainroot": {
-          //template: "ana"
+        //template: "ana"
       }
     },
     nodes: [],
     nodeMenu:{
-      details: {text:"Details"},
-      edit: {text: "Edit"},
+      read: {
+        text: "読む",
+        icon: writeLogo,
+        onClick: handleReadShow
+      },
       write: {
-        text: "write",
-        onClick: writeHandler
+        text: "書く",
+        icon: writeLogo,
+        // onClick: writeHandler
+        onClick: handleWriteShow
       }
     },
   };
 
-
   const showChart = async () => {
-    console.log(data);
-    // console.log(nodeData);
+    console.log(nodeData);
 
     // nodeMenuにWriteを追加
-    nodeData.nodeMenu.write = {
-    // data.nodeMenu.write = {
-      text: "write",
-      icon: writeLogo,
-      onClick: writeHandler
-    }
-    console.log(data);
-    // console.log(nodeData);
+    // nodeData.nodeMenu.write = {
+    //   text: "write",
+    //   icon: writeLogo,
+    //   onClick: writeHandler
+    // }
+
+    console.log(nodeData);
 
     // APIからノードの情報を取得
     //var getNodes = await getNodeList();
@@ -133,19 +155,20 @@ function Chart({ data, routerRef }) {
       if (nodeList.length <= node.id){
         console.log(node);
         nodeList.push(node);
+        // setNodeList([...nodeList, node]);
       }
       // setNodeList(nodeList.concat(node));
     } );
-
     console.log("nodeList : ", nodeList);
-    // data.nodes = nodeList;
     nodeData.nodes = nodeList;
+
     // new window.OrgChart(ref.current, data);
     console.log("nodeData : ", nodeData);
     new window.OrgChart(ref.current, nodeData);
   };
 
   useEffect(() => {
+    // handleShow();
     showChart();
   }, []);
 
@@ -153,10 +176,41 @@ function Chart({ data, routerRef }) {
     <div>
       <h1> タイトル　</h1>
       <div ref={ref} />
+      {/* 書く用のモーダル */}
       <div>
-        <CustomeModal show={show} zIndex="9999"/>
-        {/* <FormModal></FormModal> */}
+        <Modal show={showWriteModal} onHide={handleWriteClose} >
+          <Modal.Header closeButton>
+            <Modal.Title>Write</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleWriteClose}>
+              Close
+            </Button>
+            <Button variant="primary" onClick={handleWriteClose}>
+              Save Changes
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </div>
+      <div>
+        <Modal show={showReadModal} onHide={handleReadClose} >
+          <Modal.Header closeButton>
+            <Modal.Title>Read</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>{showData}</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleReadClose}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
+      {/* <CustomeModal show={show}/> */}
     </div>
   );
 }
