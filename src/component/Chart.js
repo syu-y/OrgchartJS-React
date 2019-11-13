@@ -208,7 +208,7 @@ function Chart() {
                 <Form.Label>Tipping!</Form.Label>
                 <Form.Control type="number" placeholder="0" />
               </Form.Group>
-              <Button variant="primary" type="submit">
+              <Button variant="primary" onClick={handleReadClose}>
                 Submit
               </Button>
             </Form>
