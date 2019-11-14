@@ -46,7 +46,7 @@ function Router() {
   return (
     <BrowserRouter>
       <div>
-        <Header/>
+        <Header />
         <Route path="/" component={Home} exact/>
         <Route path="/chart" component={Chart} exact/>
       </div>

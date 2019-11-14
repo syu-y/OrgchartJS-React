@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useHistory } from 'react';
 import CustomeModal from "./CustomModal";
+import Notification from './NotificationMessageModal'
 import FormModal from "./FormModal";
 import { Modal, Form, Button } from "react-bootstrap";
 import axios from "axios";
@@ -47,14 +48,22 @@ const createNode = async ({ node }) => {
 function Chart() {
   const ref = useRef(null);
 
-  var sentence = "";
-
+  //　表示するコンテンツ(State)
   const [showData, setShowData] = useState("");
+
+  //　現在選択されているノード(State)
   const [selectNode, setSelectNode] = useState(null);
+
+  //　投げ銭額(State)
   const [tipValue, setTipValue] = useState(0);
+
+  //　執筆内容(State)
+  const [writeSentence, setWriteSentence] = useState("");
+
+  //　現在のOrgChart(State)
   const [chart, setChart] = useState(null);
 
-  // モーダルが開いているか閉じているか
+  // モーダルが開いているか閉じているか(State)
   const [showReadModal, setShowReadModal] = useState(false);
   const [showWriteModal, setShowWriteModal] = useState(false);
 
@@ -72,7 +81,6 @@ function Chart() {
   function handleReadShow(nodeId) {
     var handleNode = this.get(nodeId);
     setSelectNode(handleNode);
-    sentence = handleNode['text'];
     setShowData(handleNode['text']);
     console.log("handleNode : ", handleNode);
     setChart(this);
@@ -82,7 +90,7 @@ function Chart() {
     setShowReadModal(false);
   }
 
-  // 投げ銭用handler
+  // 投げ銭実行ハンドラ
   const handleTipping = (e) => {
     var updateNode = selectNode
     console.log("Before updateNode : ", updateNode);
@@ -94,11 +102,17 @@ function Chart() {
     setShowReadModal(false);
   }
 
+  //　投げ銭額変更ハンドラ
   const handleTipChange = (e) => {
     setTipValue( Number(e.target.value) );
     console.log("tip : ", tipValue);
   }
 
+  // 執筆内容変更ハンドラ
+  const handleWriteSentenceChange = (e) => {
+    setWriteSentence( e.target.value);
+    console.log("now write : ", writeSentence);
+  }
 
   // NodoListを入れておく変数と更新する関数
   const [nodeList, setNodeList] = useState([]);
@@ -113,8 +127,8 @@ function Chart() {
       id: nodeList.length + 1,
       pid: handleNode["id"],
       tip: 0,
-      author: handleNode["author"],
-      text: handleNode["text"],
+      author: "someone",
+      text: writeSentence,
       tags: ["subroot"]
     }
     //await createNode(newNode);
@@ -127,8 +141,10 @@ function Chart() {
 
   const nodeData = {
     template: "luba",
-    scaleInitial: 0.5,
+    scaleInitial: 0.7,
     enableSearch:true,
+    smooth: 1,
+    speed: 100,
     nodeBinding: {
       field_0: "text",
       field_1: 'author',
@@ -190,6 +206,7 @@ function Chart() {
 
     // new window.OrgChart(ref.current, data);
     console.log("nodeData : ", nodeData);
+    console.log("now chart is ...\n", chart)
     new window.OrgChart(ref.current, nodeData);
   };
 
@@ -209,14 +226,19 @@ function Chart() {
             <Modal.Title>Write</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-
+            <Form>
+              <Form.Group controlId="exampleForm.ControlTextarea1">
+                <Form.Label>Write!</Form.Label>
+                <Form.Control as="textarea" size="lg" onChange={handleWriteSentenceChange}/>
+              </Form.Group>
+              <Button variant="primary" onClick={writeHandler}>
+                write
+              </Button>
+            </Form>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleWriteClose}>
               Close
-            </Button>
-            <Button variant="primary" onClick={writeHandler}>
-              write
             </Button>
           </Modal.Footer>
         </Modal>
@@ -246,6 +268,7 @@ function Chart() {
           </Modal.Footer>
         </Modal>
       </div>
+      {/* <Notification in={true} /> */}
       {/* <CustomeModal show={show}/> */}
     </div>
   );

@@ -34,6 +34,36 @@ g[class="node subroot"]{
   fill: #000000;
 }
 
+// 画面に応じたサイズ調整用
 @media only screen and (max-width: 750px) {
   div { max-width: 100%; }
+}
+
+// 通知用
+.notification {
+  display: inline-block;
+  padding: 10px;
+  background: #6699CC;
+  color: #666666;
+  text-align: center;
+  margin: 10px 0 0;
+  padding: 15px;
+  min-width: 200px;
+  position: fixed;
+  border: 1px solid #bfbfbf;
+  border-radius: 5px;
+  left: 50px;
+  bottom: 50px;
+  z-index: 9999;
+}
+.notification-enter {
+  opacity: 0;
+}
+.notification-enter-active {
+  opacity: 1;
+  transition: all 1000ms ease-out;
+}
+.notification-exit-done {
+  opacity: 0;
+  transition: all 3000ms cubic-bezier(1.0, 0, 1.0, 1.0);
 }
