@@ -50,6 +50,9 @@ function Chart() {
   var sentence = "";
 
   const [showData, setShowData] = useState("");
+  const [selectNode, setSelectNode] = useState(null);
+  const [tipValue, setTipValue] = useState(0);
+  const [chart, setChart] = useState(null);
 
   // モーダルが開いているか閉じているか
   const [showReadModal, setShowReadModal] = useState(false);
@@ -58,8 +61,9 @@ function Chart() {
   // モーダルの開閉ハンドラー
   function handleWriteShow(nodeId) {
     var handleNode = this.get(nodeId);
-    sentence = handleNode['text'];
+    setSelectNode(handleNode);
     console.log(handleNode);
+    setChart(this);
     setShowWriteModal(true);
   }
   function handleWriteClose(){
@@ -67,35 +71,57 @@ function Chart() {
   }
   function handleReadShow(nodeId) {
     var handleNode = this.get(nodeId);
+    setSelectNode(handleNode);
     sentence = handleNode['text'];
     setShowData(handleNode['text']);
-    console.log(sentence);
-    console.log(handleNode);
+    console.log("handleNode : ", handleNode);
+    setChart(this);
     setShowReadModal(true);
   }
   function handleReadClose() {
     setShowReadModal(false);
   }
 
+  // 投げ銭用handler
+  const handleTipping = (e) => {
+    var updateNode = selectNode
+    console.log("Before updateNode : ", updateNode);
+    console.log("tipValue : ", tipValue);
+    updateNode['tip'] += tipValue;
+    console.log("After updateNode : ", updateNode);
+    setSelectNode(updateNode);
+    chart.updateNode(updateNode);
+    setShowReadModal(false);
+  }
+
+  const handleTipChange = (e) => {
+    setTipValue( Number(e.target.value) );
+    console.log("tip : ", tipValue);
+  }
+
+
   // NodoListを入れておく変数と更新する関数
   const [nodeList, setNodeList] = useState([]);
 
+  // Node追加用ハンドラー
   async function writeHandler(nodeId){
     // ここに編集時の処理を追加
-    var handlerNode = this.get(nodeId);
-
+    var handleNode = selectNode;
+    console.log("parentNode : ", handleNode);
     // 新しく追加するNode
     var newNode = {
-      id: nodeData.nodes.length + 1,
-      pid: handlerNode["id"],
-      author: handlerNode["author"],
-      text: handlerNode["text"],
+      id: nodeList.length + 1,
+      pid: handleNode["id"],
+      tip: 0,
+      author: handleNode["author"],
+      text: handleNode["text"],
       tags: ["subroot"]
     }
     //await createNode(newNode);
-    handleWriteClose();
-
-    this.addNode(newNode);
+    console.log("add Node :", newNode);
+    chart.addNode(newNode);
+    handleWriteClose(false);
+    // add(newNode);
     // showChart();
   }
 
@@ -146,9 +172,9 @@ function Chart() {
     // APIからノードの情報を取得
     //var getNodes = await getNodeList();
     var getNodes = [
-      { id: 1, pid: 0, author: 'Amber McKenzie', text: "吾輩わがはいは猫である。名前はまだ無い。どこで生れたかとんと見当けんとうがつかぬ。何でも薄暗いじめじめした所でニャーニャー泣いていた事だけは記憶している。吾輩はここで始めて人間というものを見た。しかもあとで聞くとそれは書生という人間中で一番獰悪どうあくな種族であったそうだ。この書生というのは時々我々を捕つかまえて煮にて食うという話である。しかしその当時は何という考もなかったから別段恐しいとも思わなかった。ただ彼の掌てのひらに載せられてスーと持ち上げられた時何だかフワフワした感じがあったばかりである。", tags: ["mainroot"]},
-      { id: 2, pid: 1, author: 'Ava Field', text: "掌の上で少し落ちついて書生の顔を見たのがいわゆる人間というものの見始みはじめであろう。この時妙なものだと思った感じが今でも残っている。第一毛をもって装飾されべきはずの顔がつるつるしてまるで薬缶やかんだ。その後ご猫にもだいぶ逢あったがこんな片輪かたわには一度も出会でくわした事がない。のみならず顔の真中があまりに突起している。そうしてその穴の中から時々ぷうぷうと煙けむりを吹く。どうも咽むせぽくて実に弱った。これが人間の飲む煙草たばこというものである事はようやくこの頃知った。", tags: ["mainroot"]},
-      { id: 3, pid: 1, author: 'Peter Stevens', text: "まだ春は浅く、そしてその日は曇くもっていて、西空に密雲がたれこみ、日が早く暮れかけていた。青二は、すきな歌を、かたっぱしから口笛で吹いて、いい気持で歩いていった。そのとき、道ばたで、「にゃーお」と、猫のなき声がした。青二は猫が大好きだった。この間まで、青二の家にもミイという猫がいたが、それは近所の犬の群れにかこまれて、むざんにもかみ殺されてしまった。青二はそのとき、わあわあと泣いたものだ。ミイが殺されてから、青二の家には猫がいない。", tags: ["subroot"]},
+      { id: 1, pid: 0, tip: 10, author: 'Amber McKenzie', text: "吾輩わがはいは猫である。名前はまだ無い。どこで生れたかとんと見当けんとうがつかぬ。何でも薄暗いじめじめした所でニャーニャー泣いていた事だけは記憶している。吾輩はここで始めて人間というものを見た。しかもあとで聞くとそれは書生という人間中で一番獰悪どうあくな種族であったそうだ。この書生というのは時々我々を捕つかまえて煮にて食うという話である。しかしその当時は何という考もなかったから別段恐しいとも思わなかった。ただ彼の掌てのひらに載せられてスーと持ち上げられた時何だかフワフワした感じがあったばかりである。", tags: ["mainroot"]},
+      { id: 2, pid: 1, tip: 30, author: 'Ava Field', text: "掌の上で少し落ちついて書生の顔を見たのがいわゆる人間というものの見始みはじめであろう。この時妙なものだと思った感じが今でも残っている。第一毛をもって装飾されべきはずの顔がつるつるしてまるで薬缶やかんだ。その後ご猫にもだいぶ逢あったがこんな片輪かたわには一度も出会でくわした事がない。のみならず顔の真中があまりに突起している。そうしてその穴の中から時々ぷうぷうと煙けむりを吹く。どうも咽むせぽくて実に弱った。これが人間の飲む煙草たばこというものである事はようやくこの頃知った。", tags: ["mainroot"]},
+      { id: 3, pid: 1, tip: 5, author: 'Peter Stevens', text: "まだ春は浅く、そしてその日は曇くもっていて、西空に密雲がたれこみ、日が早く暮れかけていた。青二は、すきな歌を、かたっぱしから口笛で吹いて、いい気持で歩いていった。そのとき、道ばたで、「にゃーお」と、猫のなき声がした。青二は猫が大好きだった。この間まで、青二の家にもミイという猫がいたが、それは近所の犬の群れにかこまれて、むざんにもかみ殺されてしまった。青二はそのとき、わあわあと泣いたものだ。ミイが殺されてから、青二の家には猫がいない。", tags: ["subroot"]},
     ];
 
     getNodes.map(node => {
@@ -168,7 +194,7 @@ function Chart() {
   };
 
   useEffect(() => {
-    // handleShow();
+    setChart(this);
     showChart();
   }, []);
 
@@ -189,8 +215,8 @@ function Chart() {
             <Button variant="secondary" onClick={handleWriteClose}>
               Close
             </Button>
-            <Button variant="primary" onClick={handleWriteClose}>
-              Save Changes
+            <Button variant="primary" onClick={writeHandler}>
+              write
             </Button>
           </Modal.Footer>
         </Modal>
@@ -206,9 +232,9 @@ function Chart() {
             <Form>
               <Form.Group controlId="formBasicNumber">
                 <Form.Label>Tipping!</Form.Label>
-                <Form.Control type="number" placeholder="0" />
+                <Form.Control type="number" placeholder="0" onChange={handleTipChange}/>
               </Form.Group>
-              <Button variant="primary" onClick={handleReadClose}>
+              <Button variant="primary" onClick={handleTipping}>
                 Submit
               </Button>
             </Form>
