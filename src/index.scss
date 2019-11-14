@@ -16,20 +16,24 @@ code {
 // OrgChartJSの要素はhtm上では<g>タグで表現
 g[class="node mainroot"]{
   rect {
-    fill: red;
+    fill: #33FF99;
   }
 }
 g[class="node subroot"]{
   rect {
-    fill: blue;
+    fill: #FFFFCC;
   }
 }
 // フィールドの色・フォント等を変更可能
 .field_0 {
   font-family: Impact;
-  fill: white;
+  fill: #000000;
 }
 
 .field_1 {
-  fill: white;
+  fill: #000000;
+}
+
+@media only screen and (max-width: 750px) {
+  div { max-width: 100%; }
 }
