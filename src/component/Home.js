@@ -1,15 +1,68 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import ReactTable from 'react-table';
+import "react-table/react-table.css";
+import withDraggableColumns from 'react-table-hoc-draggable-columns';
+import 'react-table-hoc-draggable-columns/dist/styles.css';
 
 function Home () {
+  const ReactTableDraggableColumns = withDraggableColumns(ReactTable);
+
   return (
     <div>
-      <h1>Home画面</h1>
-      <Link to="/chart">
-        <button type="button">
-            Click Me!
-        </button>
-      </Link>
+      <h1>Home</h1>
+
+      <ReactTableDraggableColumns
+        draggableColumns= {{
+          mode: 'reorder',
+          draggable: ['title', 'totalTip']
+        }}
+        data={[
+          {
+            title: "吾輩は猫である",
+            totalTip: 320,
+            blockNumber: 10,
+            link: (<a href="/chart">Click Me!</a>)
+          },
+          {
+            title: "銀河鉄道の夜",
+            totalTip: 120,
+            blockNumber: 7,
+            link: (<a href="/chart">Click Me!</a>)
+          },
+          {
+            title: "舞姫",
+            totalTip: 87,
+            blockNumber: 6,
+            link: (<a href="/chart">Click Me!</a>)
+          },
+          {
+            title: "走れメロス",
+            totalTip: 6,
+            blockNumber: 1,
+            link: (<a href="/chart">Click Me!</a>)
+          }
+        ]}
+
+        columns={[
+          {
+            Header: 'Title',
+            accessor: 'title',
+          },
+          {
+            Header: 'Total Tip',
+            accessor: 'totalTip',
+          },
+          {
+            Header: 'Block Number',
+            accessor: 'blockNumber',
+          },
+          {
+            Header: 'link',
+            accessor: 'link',
+          }
+        ]}
+      />
     </div>
   );
 }
