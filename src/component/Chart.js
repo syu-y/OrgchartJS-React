@@ -165,10 +165,6 @@ function Chart() {
       console.log("POST : ", node);
       await fetch(`${server}/todo`, {
         method: 'POST',
-        headers: {
-          'content-type': 'application/json'
-          'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'
-        },
         body: JSON.stringify(node),
       });
     } catch (e) {
