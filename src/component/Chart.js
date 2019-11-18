@@ -9,40 +9,13 @@ import "bootstrap/dist/css/bootstrap.css";
   // 編集用のロゴ
   const writeLogo  = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="xMidYMid meet" viewBox="163.96439127408954 200.55172891423138 84.39409182274292 148.89620895844013" width="24" height="24"><defs><path d="M186.97 202.37C191.4 200.32 196.66 202.25 198.72 206.68C208.06 226.84 232.37 279.28 241.72 299.44C243.77 303.87 241.84 309.13 237.41 311.19C232.43 313.49 225.52 316.7 220.53 319.01C216.1 321.06 210.84 319.14 208.79 314.7C199.44 294.55 175.13 242.1 165.79 221.95C163.73 217.51 165.66 212.25 170.09 210.2C175.07 207.89 181.99 204.68 186.97 202.37Z" id="a3teER2aq"></path><path d="M227.64 331.42L210.48 317.7L226.66 309.48L242.84 301.26L243.81 323.2L244.79 345.14L227.64 331.42Z" id="g3jHW74tnN"></path><path d="M235.5 337.7L225.64 328.94L234.24 324.57L242.84 320.2L244.1 333.32L245.36 346.45L235.5 337.7Z" id="az3uIsU9L"></path></defs><g><g><use xlink:href="#a3teER2aq" opacity="1" fill="#6172e2" fill-opacity="1"></use></g><g><use xlink:href="#g3jHW74tnN" opacity="1" fill="#e2d661" fill-opacity="1"></use></g><g><use xlink:href="#az3uIsU9L" opacity="1" fill="#000000" fill-opacity="1"></use></g></g></svg>'
 
-const server = 'https://mq8imozqve.execute-api.ap-northeast-1.amazonaws.com/dev';
+// const server = 'https://mq8imozqve.execute-api.ap-northeast-1.amazonaws.com/dev';
+const server = 'https://mxq8pxwcvf.execute-api.ap-northeast-1.amazonaws.com/dev';
 
 const headers = {
   "Content-Type": 'application/json',
   "Access-Control-Allow-Origin": "*"
 }
-
-// GET:/todoにアクセスする関数
-// 全件取得する
-const getNodeList = async () => {
-  try {
-    const response = await fetch(`${server}/todo`)
-                            .then(res=>res.clone().json())
-    console.log("get : ",response);
-    return await response;
-  } catch (e) {
-    console.error(e);
-  }
-};
-
-// POST:/todoにアクセスする関数
-// 1件DBに書き込む
-const createNode = async ({ node }) => {
-  try {
-    await fetch(`${server}/todo`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify(node),
-    });
-  } catch (e) {
-    console.log(e);
-  }
-};
-
 
 // OrgChartコンポーネント
 function Chart() {
@@ -129,7 +102,7 @@ function Chart() {
       tip: 0,
       author: "someone",
       text: writeSentence,
-      tags: ["subroot"]
+      tags: "subroot"
     }
     await createNode(newNode);
     console.log("add Node :", newNode);
@@ -140,7 +113,6 @@ function Chart() {
   }
 
   const nodeData = {
-    template: "luba",
     scaleInitial: 0.7,
     enableSearch:true,
     smooth: 1,
@@ -173,6 +145,37 @@ function Chart() {
     },
   };
 
+  // GET:/todoにアクセスする関数
+  // 全件取得する
+  const getNodeList = async () => {
+    try {
+      const response = await fetch(`${server}/todo`)
+                              .then(res=>res.clone().json())
+      console.log("get : ",response);
+      return await response;
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  // POST:/todoにアクセスする関数
+  // 1件DBに書き込む
+  const createNode = async ({ node }) => {
+    try {
+      console.log("POST : ", node);
+      await fetch(`${server}/todo`, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json'
+          'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'
+        },
+        body: JSON.stringify(node),
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   const showChart = async () => {
     console.log(nodeData);
 
@@ -192,9 +195,9 @@ function Chart() {
     //   { id: 2, pid: 1, tip: 30, author: 'Ava Field', text: "掌の上で少し落ちついて書生の顔を見たのがいわゆる人間というものの見始みはじめであろう。この時妙なものだと思った感じが今でも残っている。第一毛をもって装飾されべきはずの顔がつるつるしてまるで薬缶やかんだ。その後ご猫にもだいぶ逢あったがこんな片輪かたわには一度も出会でくわした事がない。のみならず顔の真中があまりに突起している。そうしてその穴の中から時々ぷうぷうと煙けむりを吹く。どうも咽むせぽくて実に弱った。これが人間の飲む煙草たばこというものである事はようやくこの頃知った。", tags: ["mainroot"]},
     //   { id: 3, pid: 1, tip: 5, author: 'Peter Stevens', text: "まだ春は浅く、そしてその日は曇くもっていて、西空に密雲がたれこみ、日が早く暮れかけていた。青二は、すきな歌を、かたっぱしから口笛で吹いて、いい気持で歩いていった。そのとき、道ばたで、「にゃーお」と、猫のなき声がした。青二は猫が大好きだった。この間まで、青二の家にもミイという猫がいたが、それは近所の犬の群れにかこまれて、むざんにもかみ殺されてしまった。青二はそのとき、わあわあと泣いたものだ。ミイが殺されてから、青二の家には猫がいない。", tags: ["subroot"]},
     // ];
-
+    var length = nodeList.length;
     getNodes.map(node => {
-      if (nodeList.length <= node.id){
+      if ( length <= node.id){
         console.log(node);
         nodeList.push(node);
         // setNodeList([...nodeList, node]);
