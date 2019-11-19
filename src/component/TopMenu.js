@@ -9,14 +9,16 @@ function TopMenu() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="justify-content-center">
-            <Nav.Link href="/">Home</Nav.Link>
-            <Nav.Link href="/chart">Chart</Nav.Link>
-            {/* <LinkContainer to="/">
-              <Button>Home</Button>
+            {/* <Nav.Link href="/">Home</Nav.Link> */}
+            {/* <Nav.Link href="/chart">Chart</Nav.Link> */}
+            <LinkContainer to="/">
+              {/* <Button>Home</Button> */}
+              <Nav.Link >Home</Nav.Link>
             </LinkContainer>
             <LinkContainer to="/chart">
-              <Button>Chart</Button>
-            </LinkContainer> */}
+              <Nav.Link >Chart</Nav.Link>
+              {/* <Button>Chart</Button> */}
+            </LinkContainer>
             {/* <Nav.Link href="/">Home</Nav.Link> */}
             {/* <Nav.Link href="#chart">Chart</Nav.Link> */}
           </Nav>

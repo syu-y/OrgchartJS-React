@@ -4,6 +4,7 @@ import ReactTable from 'react-table';
 import "react-table/react-table.css";
 import withDraggableColumns from 'react-table-hoc-draggable-columns';
 import 'react-table-hoc-draggable-columns/dist/styles.css';
+import { LinkContainer } from 'react-router-bootstrap'
 
 function Home () {
   const ReactTableDraggableColumns = withDraggableColumns(ReactTable);
@@ -22,25 +23,29 @@ function Home () {
             title: "吾輩は猫である",
             totalTip: 320,
             blockNumber: 10,
-            link: (<a href="/chart">Click Me!</a>)
+            // link: (<a href="/chart">Click Me!</a>)
+            link: (<LinkContainer to="/chart"><Link >Click Me!</Link></LinkContainer>)
           },
           {
             title: "銀河鉄道の夜",
             totalTip: 120,
             blockNumber: 7,
-            link: (<a href="/chart">Click Me!</a>)
+            // link: (<a href="/chart">Click Me!</a>)
+            link: (<LinkContainer to="/chart"><Link >Click Me!</Link></LinkContainer>)
           },
           {
             title: "舞姫",
             totalTip: 87,
             blockNumber: 6,
-            link: (<a href="/chart">Click Me!</a>)
+            // link: (<a href="/chart">Click Me!</a>)
+            link: (<LinkContainer to="/chart"><Link >Click Me!</Link></LinkContainer>)
           },
           {
             title: "走れメロス",
             totalTip: 6,
             blockNumber: 1,
-            link: (<a href="/chart">Click Me!</a>)
+            // link: (<a href="/chart">Click Me!</a>)
+            link: (<LinkContainer to="/chart"><Link >Click Me!</Link></LinkContainer>)
           }
         ]}
 
