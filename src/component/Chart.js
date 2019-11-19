@@ -90,7 +90,8 @@ function Chart() {
     setShowReadModal(false);
   }
   // 投げ銭実行ハンドラ
-  const handleTipping = e => {
+  // const handleTipping = e => {
+  async function handleTipping() {
     var updateNode = selectNode;
     console.log("Before updateNode : ", updateNode);
     console.log("tipValue : ", tipValue);
@@ -98,20 +99,25 @@ function Chart() {
     console.log("After updateNode : ", updateNode);
     setSelectNode(updateNode);
     chart.updateNode(updateNode);
+    await updateTip({ node: updateNode });
     setShowReadModal(false);
   };
+
   //　投げ銭額変更ハンドラ
   const handleTipChange = e => {
     setTipValue(Number(e.target.value));
     console.log("tip : ", tipValue);
   };
+
   // 執筆内容変更ハンドラ
   const handleWriteSentenceChange = e => {
     setWriteSentence(e.target.value);
     console.log("now write : ", writeSentence);
   };
+
   // NodoListを入れておく変数と更新する関数
   const [nodeList, setNodeList] = useState([]);
+
   // Node追加用ハンドラー
   async function writeHandler(nodeId) {
     // ここに編集時の処理を追加
@@ -161,6 +167,27 @@ function Chart() {
       console.log(e);
     }
   };
+
+  const updateTip = async ({ node }) => {
+    var updateNode = nodeList.find(x => x.id == node['id']);
+    console.log("node : ", node);
+    console.log("updateNode : ", updateNode);
+    updateNode['tip'] = node['tip'];
+    // var updateNode = nodeList.filter(function(item, index){
+    //   if (item.id == node['id']) return true;
+    // });
+    try {
+      console.log("PUT : ", updateNode);
+      await fetch(`${server}/todo/${updateNode["id"]}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updateNode)
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   const showChart = async () => {
     console.log(nodeData);
     // nodeMenuにWriteを追加
@@ -181,17 +208,23 @@ function Chart() {
     getNodes.map(node => {
       if (length <= node.id) {
         console.log(node);
-        delete node.passHash;
-        delete node.hashText;
+        // delete node.passHash;
+        // delete node.hashText;
         nodeList.push(node);
         // setNodeList([...nodeList, node]);
       }
       // setNodeList(nodeList.concat(node));
     });
-    console.log("nodeList : ", nodeList);
-    nodeData.nodes = nodeList;
+    nodeData.nodes = JSON.parse(JSON.stringify(nodeList));
+
+    nodeData.nodes.map( node => {
+      delete node.passHash;
+      delete node.hashText;
+    });
+
     // new window.OrgChart(ref.current, data);
     console.log("nodeData : ", nodeData);
+    console.log("nodeList : ", nodeList);
     console.log("now chart is ...\n", chart);
     setChart(new window.OrgChart(ref.current, nodeData));
   };
