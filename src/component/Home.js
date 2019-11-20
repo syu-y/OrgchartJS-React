@@ -11,7 +11,7 @@ function Home () {
 
   return (
     <div>
-      <h1>Home</h1>
+      <h1>みんなで書く小説</h1>
 
       <ReactTableDraggableColumns
         draggableColumns= {{
@@ -24,7 +24,7 @@ function Home () {
             totalTip: 320,
             blockNumber: 10,
             // link: (<a href="/chart">Click Me!</a>)
-            link: (<LinkContainer to="/chart"><Link >Click Me!</Link></LinkContainer>)
+            link: (<Link to="/chart">Click Me!</Link>)
           },
           {
             title: "銀河鉄道の夜",

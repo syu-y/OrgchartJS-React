@@ -4,6 +4,7 @@ import Notification from "./NotificationMessageModal";
 import FormModal from "./FormModal";
 import { Modal, Form, Button } from "react-bootstrap";
 import axios from "axios";
+import { useAuth0 } from "../react-auth0-spa";
 import "bootstrap/dist/css/bootstrap.css";
 // 編集用のロゴ
 const writeLogo =
@@ -17,6 +18,7 @@ const headers = {
 };
 // OrgChartコンポーネント
 function Chart() {
+  const { user } = useAuth0();
   const nodeData = {
     template: "ula",
     scaleInitial: 0.7,
@@ -120,23 +122,25 @@ function Chart() {
 
   // Node追加用ハンドラー
   async function writeHandler(nodeId) {
-    // ここに編集時の処理を追加
-    var handleNode = selectNode;
-    console.log("parentNode : ", handleNode);
-    // 新しく追加するNode
-    var newNode = {
-      id: nodeList.length + 1,
-      pid: handleNode["id"],
-      tip: 0,
-      author: "someone",
-      text: writeSentence,
-      tags: ["subroot"],
-      img: "https://www.silhouette-illust.com/wp-content/uploads/2019/10/person_beginner_46673-101x101.jpg"
-    };
-    await createNode({ node: newNode });
-    console.log("add Node :", newNode);
-    chart.addNode(newNode);
-    handleWriteClose(false);
+    if(user !== undefined){
+      // ここに編集時の処理を追加
+      var handleNode = selectNode;
+      console.log("parentNode : ", handleNode);
+      // 新しく追加するNode
+      var newNode = {
+        id: nodeList.length + 1,
+        pid: handleNode["id"],
+        tip: 0,
+        author: user.name,
+        text: writeSentence,
+        tags: ["subroot"],
+        img: "https://www.silhouette-illust.com/wp-content/uploads/2019/10/person_beginner_46673-101x101.jpg"
+      };
+      await createNode({ node: newNode });
+      console.log("add Node :", newNode);
+      chart.addNode(newNode);
+      handleWriteClose(false);
+    }
     // add(newNode);
     // showChart();
   }
@@ -236,13 +240,13 @@ function Chart() {
 
   return (
     <div>
-      <h1> タイトル　</h1>
+      <h1> 吾輩は猫である　</h1>
       <div ref={ref} />
       {/* 書く用のモーダル */}
       <div>
         <Modal show={showWriteModal} onHide={handleWriteClose}>
           <Modal.Header closeButton>
-            <Modal.Title>Write</Modal.Title>
+            <Modal.Title>みんなで書こう！</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form>
@@ -255,13 +259,13 @@ function Chart() {
                 />
               </Form.Group>
               <Button variant="primary" onClick={writeHandler}>
-                write
+                書く
               </Button>
             </Form>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleWriteClose}>
-              Close
+              閉じる
             </Button>
           </Modal.Footer>
         </Modal>
@@ -269,7 +273,7 @@ function Chart() {
       <div>
         <Modal show={showReadModal} onHide={handleReadClose}>
           <Modal.Header closeButton>
-            <Modal.Title>Read</Modal.Title>
+            <Modal.Title>読む</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <p>{showData}</p>
@@ -279,7 +283,7 @@ function Chart() {
             ></div>
             <Form>
               <Form.Group controlId="formBasicNumber">
-                <Form.Label>Tipping!</Form.Label>
+                <Form.Label>投げ銭</Form.Label>
                 <Form.Control
                   type="number"
                   placeholder="0"
@@ -287,13 +291,13 @@ function Chart() {
                 />
               </Form.Group>
               <Button variant="primary" onClick={handleTipping}>
-                Submit
+                投げる
               </Button>
             </Form>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleReadClose}>
-              Close
+              閉じる
             </Button>
           </Modal.Footer>
         </Modal>

@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import Router from './router'
+// import Router from './router'
+import NavBar from "./component/NavBar";
+import { useAuth0 } from "./react-auth0-spa";
+import { Router, Route, Switch } from "react-router-dom";
+import history from "./utils/history";
+import Headers from './component/TopMenu';
+import Chart from './component/Chart';
+import Home from './component/Home';
+import PrivateRoute from './component/PrivateRoute'
 
 // OrgChart.templates.ana.field_2 = '<text class="field_2"  style="font-size: 14px;" fill="#ffffff" x="125" y="70" text-anchor="middle">{val}</text>';
 
@@ -39,8 +47,8 @@ const localData = {
   },
 };
 
-function App() {
-  return <Router />;
+// function App() {
+  // return <Router />;
   // return (
   //   <div>
   //     <div>
@@ -51,6 +59,24 @@ function App() {
   //     </div>
   //   </div>
   // );
+// }
+
+function App() {
+
+  return (
+    <div className="App">
+      <Router history={history}>
+        <header>
+          <Headers/>
+        </header>
+        <Switch>
+          <Route path="/" component={Home} exact/>
+          <PrivateRoute path="/chart" component={Chart} exact/>
+        </Switch>
+      </Router>
+      </div>
+  );
+
 }
 
 export default App;
