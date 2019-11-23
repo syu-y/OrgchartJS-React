@@ -12,6 +12,19 @@ code {
     monospace;
 }
 
+// コンテンツのスタイル
+h1 {
+  color: #364e96;/*文字色*/
+  padding: 0.5em 0;/*上下の余白*/
+  border-top: solid 3px #364e96;/*上線*/
+  border-bottom: solid 3px #364e96;/*下線*/
+}
+
+div.modal-body p {
+  line-height: 1.75;
+  font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+}
+
 // ブロックの色を分岐
 // OrgChartJSの要素はhtm上では<g>タグで表現
 g[class="node mainroot"]{

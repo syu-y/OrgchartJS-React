@@ -11,7 +11,7 @@ function Home () {
 
   return (
     <div>
-      <h1>みんなで書く小説</h1>
+      <h1>みんなで作る小説</h1>
 
       <ReactTableDraggableColumns
         draggableColumns= {{
