@@ -208,6 +208,7 @@ function Chart() {
     }
   };
 
+  // 投げ銭実行
   const updateTip = async ({ node }) => {
     var getNodes = await getNodeList();
     var updateNode = getNodes.find(x => x.id == node['id']);
