@@ -159,9 +159,11 @@ function Chart() {
       // ここに編集時の処理を追加
       var handleNode = selectNode;
       console.log("parentNode : ", handleNode);
+      console.log("NodeList", nodeList);
+      var getNodes = await getNodeList();
       // 新しく追加するNode
       var newNode = {
-        id: nodeList.length + 1,
+        id: getNodes.length + 1,
         pid: handleNode["id"],
         tip: 0,
         author: user.name,
@@ -207,7 +209,8 @@ function Chart() {
   };
 
   const updateTip = async ({ node }) => {
-    var updateNode = nodeList.find(x => x.id == node['id']);
+    var getNodes = await getNodeList();
+    var updateNode = getNodes.find(x => x.id == node['id']);
     console.log("node : ", node);
     console.log("updateNode : ", updateNode);
     updateNode['tip'] = node['tip'];
