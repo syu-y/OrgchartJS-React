@@ -1,78 +1,59 @@
 import React, { useState, useEffect } from 'react';
-// import Router from './router'
+import { Router, Route, Switch } from "react-router-dom";
 import NavBar from "./component/NavBar";
 import { useAuth0 } from "./react-auth0-spa";
-import { Router, Route, Switch } from "react-router-dom";
 import history from "./utils/history";
+import PrivateRoute from './component/PrivateRoute'
+import SideNav, { Toggle, Nav, NavItem, NavIcon, NavText } from '@trendmicro/react-sidenav';
+import '@trendmicro/react-sidenav/dist/react-sidenav.css';
+
 import Headers from './component/TopMenu';
 import Chart from './component/Chart';
 import Home from './component/Home';
-import PrivateRoute from './component/PrivateRoute'
-
-// OrgChart.templates.ana.field_2 = '<text class="field_2"  style="font-size: 14px;" fill="#ffffff" x="125" y="70" text-anchor="middle">{val}</text>';
-
-// OrgChartをローカルで試すためのデータ
-const localData = {
-  // template: "luba",
-  scaleInitial: 0.5,
-  enableSearch:true,
-  // ノードに持たせる要素
-  nodeBinding: {
-    field_0: "text",
-    field_1: 'author',
-  },
-  // タグを使うことでindex.scssで表示を分岐が可能
-  tags: {
-    "subroot": {
-      template: "luba"
-    },
-    "mainroot": {
-      template: "luba"
-    }
-  },
-  nodes: [
-    { id: 1, pid: 0, author: 'Amber McKenzie', text: "あいうえお", tags: ["mainroot"]},
-    { id: 2, pid: 1, author: 'Ava Field', text: "かきくけこ", tags: ["mainroot"]},
-    { id: 3, pid: 1, author: 'Peter Stevens', text: "さしすせそ", tags: ["subroot"]},
-  ],
-  nodeMenu:{
-    details: {text:"Details"},
-    // edit: {text:"Edit"},
-    // add: {text:"Add"},
-    // remove: {text:"Remove"}
-  //   write: {
-  //     text: "Write",
-  //     onClick: writeHandler
-  //   }
-  },
-};
-
-// function App() {
-  // return <Router />;
-  // return (
-  //   <div>
-  //     <div>
-  //       <TopMenu />
-  //     </div>
-  //     <div style={{ height:'500px', width:'1200px', margin: '0 30px' }}>
-  //       <Chart data={localData} />
-  //     </div>
-  //   </div>
-  // );
-// }
+import UserProfile from './component/UserProfile';
+import { makeStyles } from '@material-ui/core/styles';
+import { width } from '@material-ui/system';
 
 function App() {
-
+  const { isAuthenticated, user } = useAuth0();
   return (
     <div className="App">
       <Router history={history}>
         <header>
           <Headers/>
         </header>
-        <Switch>
-          <Route path="/" component={Home} exact/>
-          <PrivateRoute path="/chart" component={Chart} exact/>
-        </Switch>
+        <div style={{ position: 'relative', height: 'calc(100vh - 50px)'}}>
+        <SideNav onSelect={(selected) => {const to = '/' + selected; history.push(to);}} style={{background: 'midnightblue'}}>
+          <SideNav.Toggle />
+          <SideNav.Nav defaultSelected="">
+            <NavItem eventKey="">
+              <NavIcon>
+                <i className="fa fa-fw fa-home" style={{ fontSize: '1.75em' }} />
+              </NavIcon>
+              <NavText>Home</NavText>
+            </NavItem>
+            <NavItem eventKey="chart">
+              <NavIcon>
+                  <i className="fa fa-fw fa-line-chart" style={{ fontSize: '1.75em' }} />
+              </NavIcon>
+              <NavText>Charts</NavText>
+            </NavItem>
+            <NavItem eventKey="userprofile">
+              <NavIcon>
+                  <i className="fa fa-fw fa-user" style={{ fontSize: '1.75em' }} />
+              </NavIcon>
+              <NavText>User</NavText>
+            </NavItem>
+          </SideNav.Nav>
+        </SideNav>
+        <main>
+          <div style={{ position: 'relative', left: '70px', display: 'inline-block', width:1800 }}>
+          <Route path="/" exact component={props => <Home />} />
+          <PrivateRoute path="/chart" component={props => <Chart />} />
+          <PrivateRoute path="/userprofile" component={props => <UserProfile/>} />
+          </div>
+        </main>
+        </div>
       </Router>
       </div>
   );

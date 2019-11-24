@@ -28,7 +28,7 @@ function TopMenu() {
                     <Nav.Link>Loading...</Nav.Link>
                   </LinkContainer>
               )}
-              {isAuthenticated && (
+              {/* {isAuthenticated && (
                 <LinkContainer to="/">
                     <Nav.Link>Home</Nav.Link>
                   </LinkContainer>
@@ -37,7 +37,7 @@ function TopMenu() {
                 <LinkContainer to="/chart">
                     <Nav.Link >Chart</Nav.Link>
                 </LinkContainer>
-              )}
+              )} */}
               {isAuthenticated && (
                 <LinkContainer to="">
                     <Nav.Link ><Profile /></Nav.Link>
