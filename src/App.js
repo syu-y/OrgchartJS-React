@@ -48,9 +48,9 @@ function App() {
         </SideNav>
         <main>
           <div style={{ position: 'relative', left: '70px', display: 'inline-block', width:1800 }}>
-          <Route path="/" exact component={props => <Home />} />
           <PrivateRoute path="/chart" component={props => <Chart />} />
           <PrivateRoute path="/userprofile" component={props => <UserProfile/>} />
+          <PrivateRoute path="/" exact component={props => <Home />} />
           </div>
         </main>
         </div>
